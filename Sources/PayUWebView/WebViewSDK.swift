@@ -46,7 +46,7 @@ public extension PayUDelegate {
 
 // MARK: - WebViewSDK
 
-public class WebViewSDK: NSObject, WKNavigationDelegate, WKScriptMessageHandler, WKUIDelegate {
+public class WebViewSDK: NSObject {
 
     // MARK: - Public Properties
 
