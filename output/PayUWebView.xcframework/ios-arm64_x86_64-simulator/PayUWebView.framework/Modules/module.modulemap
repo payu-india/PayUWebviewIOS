@@ -1,0 +1,6 @@
+framework module PayUWebView {
+  umbrella header "PayUWebView.h"
+  export *
+
+  module * { export * }
+}
