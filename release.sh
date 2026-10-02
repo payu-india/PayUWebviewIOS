@@ -1,6 +1,6 @@
 #!/bin/bash
 # ─────────────────────────────────────────────────────────────────────────────
-# PayUWebViewIOSIOS — GitHub (SPM) + CocoaPods release script
+# PayUIndia-Webview — GitHub (SPM) + CocoaPods release script
 # Run from the repo root:  bash release.sh
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -9,11 +9,14 @@ set -e
 REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$REPO_DIR"
 
-VERSION="1.0.1"
-PODSPEC="PayUWebViewIOS.podspec"
+VERSION="1.0.2"
+PODSPEC="PayUIndia-Webview.podspec"
+TRUNK_EMAIL="integration@payu.in"
 
-echo "▶ Repo: $REPO_DIR"
+echo "▶ Repo:    $REPO_DIR"
+echo "▶ Pod:     PayUIndia-Webview"
 echo "▶ Version: $VERSION"
+echo "▶ Trunk:   $TRUNK_EMAIL"
 echo ""
 
 # ── 1. Clear any stale git lock ───────────────────────────────────────────────
@@ -25,29 +28,34 @@ fi
 
 # ── 2. Git identity ───────────────────────────────────────────────────────────
 git config user.name  "PayU"
-git config user.email "Integration@payu.in"
+git config user.email "$TRUNK_EMAIL"
 
-# ── 3. Stage only source + gitignore + podspec (skip Xcode user-data, DS_Store) ──
+# ── 3. Stage files ────────────────────────────────────────────────────────────
 echo "▶ Staging files..."
 git add Sources/PayUWebView/WebViewSDK.swift
+git add Sources/PayUWebView/PayUWebView.h
 git add .gitignore
 git add Package.swift
-git add PayUWebViewIOS.podspec
+git add PayUIndia-Webview.podspec
+git add release.sh
 git status --short
 
 # ── 4. Commit ─────────────────────────────────────────────────────────────────
 echo ""
 echo "▶ Committing..."
-git commit -m "chore: rename SDK to PayUWebViewIOS, bump version to 1.0.1"
+if git diff --cached --quiet; then
+  echo "   Nothing new to commit — working tree is clean."
+else
+  git commit -m "chore: release PayUIndia-Webview $VERSION"
+fi
 
 # ── 5. Tag for SPM + CocoaPods ────────────────────────────────────────────────
 echo ""
 echo "▶ Creating tag $VERSION..."
-# Delete local tag if it already exists (re-release scenario)
-git tag -d "$VERSION" 2>/dev/null || true
+git tag -d "$VERSION" 2>/dev/null || true          # remove local tag if re-releasing
 git tag -a "$VERSION" -m "Release $VERSION"
 
-# ── 6. Push branch + tag to GitHub (SPM consumers resolve via the tag) ────────
+# ── 6. Push branch + tag to GitHub ───────────────────────────────────────────
 echo ""
 echo "▶ Pushing to GitHub..."
 git push origin main
@@ -55,23 +63,21 @@ git push origin "$VERSION"
 
 echo ""
 echo "✅ GitHub push done. SPM consumers can now use:"
-echo "   .package(url: \"https://github.com/payu-india/PayUWebViewIOSIOS.git\", from: \"$VERSION\")"
+echo "   .package(url: \"https://github.com/payu-india/PayUWebviewIOS.git\", from: \"$VERSION\")"
+echo "   // then in your target: .product(name: \"PayUIndiaWebview\", package: \"PayUIndiaWebview\")"
 
 # ── 7. CocoaPods trunk push ───────────────────────────────────────────────────
-TRUNK_EMAIL="Integration@payu.in"
-
-# Check whether a trunk session already exists for this email
 echo ""
 echo "▶ Checking CocoaPods trunk session for $TRUNK_EMAIL..."
-if ! pod trunk me 2>&1 | grep -q "$TRUNK_EMAIL"; then
+if ! pod trunk me 2>&1 | grep -qi "$TRUNK_EMAIL"; then
   echo ""
   echo "⚠️  No active trunk session found for $TRUNK_EMAIL."
-  echo "    Run the following command, then check $TRUNK_EMAIL for the confirmation link:"
+  echo "    Register with:"
   echo ""
   echo "    pod trunk register $TRUNK_EMAIL 'PayU' --description='Release machine'"
   echo ""
-  echo "    After confirming, re-run:  bash release.sh"
-  echo "    (The script will skip the already-pushed git steps and go straight to pod push.)"
+  echo "    Open the confirmation link sent to $TRUNK_EMAIL, then re-run: bash release.sh"
+  echo "    (Git steps above are already done — the script will skip to the pod push.)"
   exit 1
 fi
 
@@ -85,4 +91,4 @@ pod trunk push "$PODSPEC" --allow-warnings
 
 echo ""
 echo "✅ CocoaPods release done. Consumers can now use:"
-echo "   pod 'PayUWebViewIOS', '~> $VERSION'"
+echo "   pod 'PayUIndia-Webview', '~> $VERSION'"
