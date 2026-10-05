@@ -9,8 +9,8 @@ set -e
 REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$REPO_DIR"
 
-VERSION="1.0.0"
-PODSPEC="PayUWebView.podspec"
+VERSION="1.0.1"
+PODSPEC="PayUWebview.podspec"
 
 echo "▶ Repo: $REPO_DIR"
 echo "▶ Version: $VERSION"
@@ -31,13 +31,14 @@ git config user.email "Integration@payu.in"
 echo "▶ Staging files..."
 git add Sources/PayUWebView/WebViewSDK.swift
 git add .gitignore
-git add PayUWebView.podspec
+git add Package.swift
+git add PayUWebview.podspec
 git status --short
 
 # ── 4. Commit ─────────────────────────────────────────────────────────────────
 echo ""
 echo "▶ Committing..."
-git commit -m "feat: append sdkInfo telemetry to payment POST body"
+git commit -m "chore: rename SDK to PayUWebview, bump version to 1.0.1"
 
 # ── 5. Tag for SPM + CocoaPods ────────────────────────────────────────────────
 echo ""
@@ -84,4 +85,4 @@ pod trunk push "$PODSPEC" --allow-warnings
 
 echo ""
 echo "✅ CocoaPods release done. Consumers can now use:"
-echo "   pod 'PayUWebView', '~> $VERSION'"
+echo "   pod 'PayUWebview', '~> $VERSION'"
