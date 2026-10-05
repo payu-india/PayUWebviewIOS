@@ -4,20 +4,20 @@
 import PackageDescription
 
 let package = Package(
-    name: "PayUWebview",
+    name: "PayUWebViewIOS",
     platforms: [
         .iOS(.v13)
     ],
     products: [
         .library(
-            name: "PayUWebview",
-            targets: ["PayUWebview"]
+            name: "PayUWebViewIOS",
+            targets: ["PayUWebViewIOS"]
         ),
     ],
     dependencies: [],
     targets: [
         .target(
-            name: "PayUWebview",
+            name: "PayUWebViewIOS",
             dependencies: [],
             path: "Sources",
             linkerSettings: [

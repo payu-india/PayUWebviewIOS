@@ -1,6 +1,6 @@
 #!/bin/bash
 # ─────────────────────────────────────────────────────────────────────────────
-# PayUWebviewIOS — GitHub (SPM) + CocoaPods release script
+# PayUWebViewIOSIOS — GitHub (SPM) + CocoaPods release script
 # Run from the repo root:  bash release.sh
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -10,7 +10,7 @@ REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$REPO_DIR"
 
 VERSION="1.0.1"
-PODSPEC="PayUWebview.podspec"
+PODSPEC="PayUWebViewIOS.podspec"
 
 echo "▶ Repo: $REPO_DIR"
 echo "▶ Version: $VERSION"
@@ -32,13 +32,13 @@ echo "▶ Staging files..."
 git add Sources/PayUWebView/WebViewSDK.swift
 git add .gitignore
 git add Package.swift
-git add PayUWebview.podspec
+git add PayUWebViewIOS.podspec
 git status --short
 
 # ── 4. Commit ─────────────────────────────────────────────────────────────────
 echo ""
 echo "▶ Committing..."
-git commit -m "chore: rename SDK to PayUWebview, bump version to 1.0.1"
+git commit -m "chore: rename SDK to PayUWebViewIOS, bump version to 1.0.1"
 
 # ── 5. Tag for SPM + CocoaPods ────────────────────────────────────────────────
 echo ""
@@ -55,7 +55,7 @@ git push origin "$VERSION"
 
 echo ""
 echo "✅ GitHub push done. SPM consumers can now use:"
-echo "   .package(url: \"https://github.com/payu-india/PayUWebviewIOS.git\", from: \"$VERSION\")"
+echo "   .package(url: \"https://github.com/payu-india/PayUWebViewIOSIOS.git\", from: \"$VERSION\")"
 
 # ── 7. CocoaPods trunk push ───────────────────────────────────────────────────
 TRUNK_EMAIL="Integration@payu.in"
@@ -85,4 +85,4 @@ pod trunk push "$PODSPEC" --allow-warnings
 
 echo ""
 echo "✅ CocoaPods release done. Consumers can now use:"
-echo "   pod 'PayUWebview', '~> $VERSION'"
+echo "   pod 'PayUWebViewIOS', '~> $VERSION'"
