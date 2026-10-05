@@ -1,0 +1,23 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Xcode user data
+xcuserdata/
+*.xcuserstate
+*.xcuserdatad/
+
+# Swift Package Manager
+.build/
+.swiftpm/
+*.resolved
+
+# Build output
+output/
+*.xcframework/
+DerivedData/
+
+# CocoaPods (when used as a consumer)
+Pods/
+Podfile.lock

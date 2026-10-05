@@ -118,7 +118,10 @@ public class WebViewSDK: NSObject {
         }
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.httpBody = postString.data(using: .utf8)
+        let sdkInfo = "[{\"platform\":\"ios\",\"name\":\"WebViewSDK\",\"version\":\"1.0.0\"}]"
+        let encodedSdkInfo = sdkInfo.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? sdkInfo
+        let fullPostString = postString + "&sdkInfo=\(encodedSdkInfo)"
+        request.httpBody = fullPostString.data(using: .utf8)
         webView?.load(request)
     }
 
